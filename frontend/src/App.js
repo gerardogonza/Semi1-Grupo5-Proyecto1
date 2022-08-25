@@ -4,7 +4,7 @@ import {
   BrowserRouter ,
   Route,Routes
 } from "react-router-dom";
-import Login from './componets/Login/login';
+import Login from './components/Login/login';
 
 
 function App() {
