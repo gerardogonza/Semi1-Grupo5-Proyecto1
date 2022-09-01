@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from 'react';
 import { MDBDataTableV5 } from 'mdbreact';
 import { Button } from 'react-bootstrap';
+import Barra from '../Barra'
 
 
 
@@ -100,6 +101,8 @@ const VerArchivos = () => {
 
     return (
         <div>
+        <Barra/>
+        <br></br>
             <br/><br/>
             <center>
                 <h1 className="h1">Archivos de mis amigos</h1>                    
