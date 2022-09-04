@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
+import encrypt
 
 app = Flask(__name__)
 
@@ -21,6 +22,8 @@ def signup():
         password = request.form['password']
         email= request.form['email']
         url = request.form["url"] 
+
+        password = encrypt.encrypt(password)
 
         table = dynamodb.Table('users')
 
@@ -50,8 +53,13 @@ def login():
         name = items[0]['name']
         email= items[0]['email']
 
-        if password == items[0]['password']:
-            return 'Name: '+name+' Email: '+email
+        encryptedpassword = items[0]['password'].value.decode("utf-8")
+        decryptedpassword = encrypt.decrypt(encryptedpassword)
+
+        decryptedpassword = decryptedpassword.decode("utf-8")
+
+        if str(password) == str(decryptedpassword):
+            return 'Name: '+name+' Email: '+email + ' Password: '+decryptedpassword
         return 'User Doesnt Exist'
 
 @app.route('/addfile', methods=['POST'])
