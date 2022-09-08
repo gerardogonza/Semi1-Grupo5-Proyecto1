@@ -1,16 +1,17 @@
 import React from "react";
 
-import ListadoUsuarios from './ListadoUsuarios';
 import Barra from '../Barra'
+import CargarArchivo2 from './CargarArchivo2'
 
-function AgregarAmigos() {
+function CargarArchivo() {
     return (
           <div>
             <Barra/>
             <br></br>
-            <ListadoUsuarios/>
+            <CargarArchivo2/>
+
           </div>
     );
   }
   
-  export default AgregarAmigos;
+  export default CargarArchivo;
