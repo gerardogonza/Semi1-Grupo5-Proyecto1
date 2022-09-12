@@ -238,8 +238,48 @@ app.delete('/deletefile', (req, res)=>{
         }
     });
 
+    res.send(respuesta)
+})
 
+app.post('/home', (req, res)=>{
+    let owner = req.body.owner
+    let type = req.body.type
+    let respuesta = true
 
+    let params = {
+        TableName: 'users',
+        Key: {
+            'username': owner
+        }
+    };
+
+    dynamoClient.get(params, function(err, data) {
+        if (err) 
+            console.log(err);
+        else 
+            console.log(data.Item.url)
+    });
+
+    let params2 = {
+        TableName: 'files',
+        KeyConditionExpression: '#owner_s = :s and id > :e',
+        ExpressionAttributeValues: {
+            ':s': owner,
+            ':e': 0,
+            ':f': type
+          },
+        FilterExpression: '#type = :f',
+        ExpressionAttributeNames: {'#owner_s': 'owner', '#type': 'type'}
+    };
+
+    dynamoClient.query(params2, function(err, data) {
+        if (err) {
+            console.log(err);
+            respuesta = false
+        } else {
+            console.log(data.Items)
+        }
+    });
 
     res.send(respuesta)
 })
