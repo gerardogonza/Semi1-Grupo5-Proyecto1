@@ -65,9 +65,9 @@ def login():
 @app.route('/addfile', methods=['POST'])
 def addfile():
     if request.method == 'POST':
-        owner = request.form['owner']
-        name = request.form['name']
-        type= request.form['type']
+        owner = request.json['owner']
+        name = request.json['name']
+        type= request.json['type']
         s3_path= 'ruta_prueba'
 
         table = dynamodb.Table('files')
@@ -93,10 +93,10 @@ def addfile():
 @app.route('/editfile', methods=['POST'])
 def editfile():
     if request.method == 'POST':
-        owner = request.form['owner']
-        name = request.form['name']
-        new_name = request.form['new_name']
-        type= request.form['type']
+        owner = request.json['owner']
+        name = request.json['name']
+        new_name = request.json['new_name']
+        type= request.json['type']
 
         table = dynamodb.Table('files')
 
@@ -129,8 +129,8 @@ def editfile():
 @app.route('/deletefile', methods=['DELETE'])
 def deletefile():
     if request.method == 'DELETE':
-        owner = request.form['owner']
-        name = request.form['name']
+        owner = request.json['owner']
+        name = request.json['name']
 
         table = dynamodb.Table('files')
 
