@@ -16,7 +16,7 @@ function Dashboard() {
 
                                 </li>
                                 <li className="list-group-item"><Link to={'/cargar_archivo'}><Button variant="primary" size="sm">Subir Archivo</Button></Link></li>
-                                <li className="list-group-item"><Button variant="primary" size="sm">Editar Archivo</Button></li>
+                                <li className="list-group-item"><Link to={'/editar_archivo'}><Button variant="primary" size="sm">Editar Archivo</Button></Link></li>
                                 <li className="list-group-item"><Button variant="primary" size="sm">ELiminar Archivo</Button></li>
                                 <li className="list-group-item"><Button variant="primary" size="sm">Agregar Archivo</Button></li>
                                 <li className="list-group-item"><Link to={'/ver_archivo'}><Button variant="primary" size="sm">Ver Archivo</Button></Link></li>
