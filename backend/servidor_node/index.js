@@ -3,6 +3,7 @@ const app = express();
 var bodyParser = require('body-parser');
 const port = 8000;
 const cors = require('cors');
+const encrypt = require('./encrypt')
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -34,6 +35,8 @@ app.post('/signup', (req, res)=>{
     let url = req.body.url;
     let respuesta = true;
 
+    password = encrypt.encrypt(password)
+
 
     let params = {
         TableName: 'users',
@@ -63,7 +66,7 @@ app.get('/login', (req, res)=>{
 
     //console.log('username: ',username)
     //console.log('password: ',password)
-
+ 
     let params = {
         TableName: 'users',
         Key: {
@@ -74,8 +77,9 @@ app.get('/login', (req, res)=>{
     dynamoClient.get(params, function(err, data) {
         if (err) 
             console.log(err);
-        else 
-            if (password == data.Item.password)
+        else
+            var descrypted = encrypt.decrypt(data.Item.password) 
+            if (password == descrypted)
                 console.log(data.Item);
             else return console.log("User does not exist")
     });
