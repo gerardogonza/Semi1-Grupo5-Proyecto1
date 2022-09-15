@@ -1,9 +1,17 @@
-const URL = 'http://127.0.0.1:5000';
+const URL = "http://localhost:8000";
 
-export const parimpar='PAROIMPAR';
-export const fibonacci='FIBO';
-export const alrevez='ALREVEZ';
-export const potencia='POTENCIA';
-export const raiz='RAIZ';
+export const login = "login";
 
-
+export const methodPOST = (peticion, data) => {
+  return fetch(`${URL}/${peticion}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((res) => {
+      return res;
+    });
+};
