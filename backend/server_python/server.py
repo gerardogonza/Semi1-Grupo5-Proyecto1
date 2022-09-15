@@ -76,7 +76,11 @@ def addfile():
             KeyConditionExpression = Key('owner').eq(owner)
         )
 
-        id = len(response['Items'])+1
+        items =response['Items']
+        if len(items) == 0:
+            id = 1
+        else:
+            id = items[-1]['id'] + 1
 
         table.put_item(
                 Item = {
@@ -152,6 +156,24 @@ def deletefile():
                             'id': id})
         
         return 'File Deleted'
+
+@app.route('/addfriend', methods=['POST'])
+def addfriend():
+    if request.method == 'POST':
+        emisary = request.json['emisary']
+        reciever = request.json['reciever']
+
+        table = dynamodb.Table('friendship') 
+
+        table.put_item(
+                Item = {
+                    'emisary': emisary,
+                    'reciever': reciever
+                }
+        )
+        
+        return 'Friend Added'
+
 
 if __name__ == '__main__':
     app.run()
