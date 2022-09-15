@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request
+from flask_lt import run_with_lt
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 import encrypt
 
 app = Flask(__name__)
+run_with_lt(app)
 
 dynamodb = boto3.resource('dynamodb',
                         aws_access_key_id='AKIAS73YTZZY6ENQATXM',
@@ -17,11 +19,11 @@ def hello():
 @app.route('/signup', methods=['POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form['username']
-        name = request.form['name']
-        password = request.form['password']
-        email= request.form['email']
-        url = request.form["url"] 
+        username = request.json['username']
+        name = request.json['name']
+        password = request.json['password']
+        email= request.json['email']
+        url = request.json["url"] 
 
         password = encrypt.encrypt(password)
 
@@ -42,8 +44,8 @@ def signup():
 @app.route('/login', methods=['GET'])
 def login():
     if request.method == 'GET':   
-        username = request.form['username']
-        password = request.form['password']
+        username = request.json['username']
+        password = request.json['password']
 
         table = dynamodb.Table('users')
         response = table.query(
@@ -52,11 +54,9 @@ def login():
         items = response['Items']
         name = items[0]['name']
         email= items[0]['email']
+        encryptedpassword = items[0]['password']
 
-        encryptedpassword = items[0]['password'].value.decode("utf-8")
         decryptedpassword = encrypt.decrypt(encryptedpassword)
-
-        decryptedpassword = decryptedpassword.decode("utf-8")
 
         if str(password) == str(decryptedpassword):
             return 'Name: '+name+' Email: '+email + ' Password: '+decryptedpassword
@@ -152,3 +152,6 @@ def deletefile():
                             'id': id})
         
         return 'File Deleted'
+
+if __name__ == '__main__':
+    app.run()
