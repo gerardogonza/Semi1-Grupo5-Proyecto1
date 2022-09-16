@@ -80,7 +80,7 @@ const uploadFile = (file) => {
 
 const subirArchivo = async () => {
     uploadFile(selectedFile)
-    console.log(files)
+    // console.log(files)
       if (
           files.owner !== "" &&
           files.name !== "" &&
@@ -88,8 +88,8 @@ const subirArchivo = async () => {
           files.s3_path !== ""
           ) {
     const respuest= await methodPOST(subirArchivos, files);
-    console.log(respuest);
-     console.log(files)
+    // console.log(respuest);
+    //  console.log(files)
      navigate("/dashboard", { state: datosDashboard })
     } else {
       swal("Incomplete data", "Please fill in all the fields!", "error");

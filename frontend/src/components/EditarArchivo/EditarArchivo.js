@@ -17,10 +17,7 @@ const CargarArchivos = () => {
       owner: datosDashboard.datosDashboard[0]?.username,
       type: tipo,
     });
-    console.log({  name: datosDashboard.name,
-        new_name: datosDashboard.name,
-        owner: datosDashboard.datosDashboard[0]?.username,
-        type: tipo,});
+   
     navigate("/dashboard", { state: datosDashboard.datosDashboard });
     console.log(tipo);
   };
