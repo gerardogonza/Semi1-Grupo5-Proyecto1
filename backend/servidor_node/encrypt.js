@@ -17,4 +17,4 @@ function decrypt(enc) {
 }
 
 exports.encrypt = encrypt;
-exports.decrypt = decrypt;
+exports.decrypt = decrypt; 

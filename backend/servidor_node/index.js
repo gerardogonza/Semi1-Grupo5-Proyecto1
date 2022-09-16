@@ -3,7 +3,7 @@ const app = express();
 var bodyParser = require('body-parser');
 const port = 8000;
 const cors = require('cors');
-const encrypt = require('./encrypt')
+const encrypt = require('./encrypt2')
 app.use(cors());
 
 app.use(bodyParser.json());
