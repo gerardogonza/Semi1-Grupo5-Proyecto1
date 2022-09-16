@@ -67,7 +67,8 @@ const uploadFile = (file) => {
         Bucket: S3_BUCKET,
         Key: file.name
     };
-    
+
+
     myBucket.putObject(params)
         .on('httpUploadProgress', (evt) => {
             setProgress(Math.round((evt.loaded / evt.total) * 100))
