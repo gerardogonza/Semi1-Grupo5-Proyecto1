@@ -1,105 +1,44 @@
-import React, {useRef,useState,useEffect} from 'react';
-import { Button, Form, Col, Container, Row} from 'react-bootstrap';
-
-
+import React, { useRef, useState, useEffect } from "react";
+import { Button, Form, Col, Container, Row } from "react-bootstrap";
+import { methodPOST, editarArchivo } from "../../services/api";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const CargarArchivos = () => {
-    let [archivos, setArchivos] = useState([]) 
+  const location = useLocation();
+  let navigate = useNavigate();
+  const [datosDashboard, setDatosDashboard] = useState(location.state);
+  const [tipo, setTipo] = useState("");
+  useEffect(() => {}, []);
 
+  const editarTipo = async (name) => {
+    const respuesta = await methodPOST(editarArchivo, {
+      name: datosDashboard.name,
+      new_name: datosDashboard.name,
+      owner: datosDashboard.datosDashboard[0]?.username,
+      type: tipo,
+    });
+   
+    navigate("/dashboard", { state: datosDashboard.datosDashboard });
+    console.log(tipo);
+  };
 
-    useEffect(() => {
-        var formdata = new FormData();
-        var requestOptions = {
-            method: 'GET',
-            data: formdata,
-            redirect: 'follow'
-        };
+  return (
+    <div>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <h1>Editar archivos</h1>
 
-        fetch("http://localhost:8000/ListadoArchivos", requestOptions)
-        .then(response => response.json())
-        .then(result => setArchivos(result))
-        .catch(error => console.log('error', error));
+      <Container>
+        <br></br>
+        <br></br>
 
-    },[])
-    
+        <Row>
+          <Col></Col>
 
-
-
-
-
-
-    let file = useRef()    
-    let nombreArchivo = useRef()    
-    let visibilidad = useRef()    
-
-
-
-
-
-
-
-    //metodo para mandar con el backend
-    const EditarArchivo = async () => {
-        let file1 = file.current.value
-        let nombreArchivo1 = nombreArchivo.current.value
-        let visibilidad1 = visibilidad.current.value
-        let datos = {
-                    file: file1,
-                    nombreArchivo: nombreArchivo1,
-                    visibilidad: visibilidad1
-                }
-
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        
-        var a = JSON.stringify({
-            "archivo": datos
-        });
-
-        var requesOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: a,
-            redirect: 'follow'
-        };
-
-        fetch("http://localhost:8000/ModificarArchivo", requesOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-
-        
-        alert('¡Se ha modificado el archivo con éxito!')
-
-    }
-
-
-
-
-
-
-
-
-    
-
-
-
-    return (
-        <div>
-          <br></br><br></br><br></br><br></br>
-          <h1>Editar archivos</h1>
-
-
-            <Container>
-            <br></br><br></br>
-
-
-                <Row>
-                    <Col></Col>
-
-                    <Col>
-                        
-                        <Row>
+          <Col>
+            {/* <Row>
                             <Form.Label column>
                                 Selecciona un archivo
                             </Form.Label>
@@ -114,11 +53,10 @@ const CargarArchivos = () => {
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
-                        </Row>
-                        <br></br>
+                        </Row> */}
+            <br></br>
 
-
-
+            {/* 
                         <Row>
                             <Form.Label column lg={2}>
                                 Nombre 
@@ -126,36 +64,41 @@ const CargarArchivos = () => {
                             <Col>
                                 <Form.Control type="text" placeholder="Nuevo nombre del archivo" ref={nombreArchivo} />
                             </Col>
-                        </Row>
-                        <br></br>
+                        </Row> */}
+            <br></br>
 
+            <Row>
+              <label>Nombre: {datosDashboard.name} </label>
+              <label>USER: {datosDashboard.datosDashboard[0]?.username}</label>
+            </Row>
+            <Row>
+              <Form.Label column lg={2}   >
+                Tipo
+              </Form.Label>
+              <Col>
+                <Form.Control type="text" placeholder="Public, Private" onChange={(e) => setTipo(e.target.value)} />
+              </Col>
+            </Row>
+            <Row>
+              <br></br>
+            </Row>
 
-                        <Row>
-                            <Form.Label column lg={2}>
-                                Tipo 
-                            </Form.Label>
-                            <Col>
-                                <Form.Control type="text" placeholder="Publico, Privado" ref={visibilidad} />
-                            </Col>
-                        </Row>
-                        <Row><br></br></Row>
+            <Row>
+              <Button
+                variant="outline-info"
+                size="lg"
+                onClick={() => editarTipo()}
+              >
+                Editar archivo
+              </Button>
+            </Row>
+          </Col>
 
+          <Col></Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
 
-
-                        <Row>
-                            <Button  onClick={EditarArchivo} variant="outline-info" size="lg">
-                                Editar archivo
-                            </Button>  
-                        </Row>
-                    </Col>
-
-                    <Col></Col>
-                </Row>
-            </Container>
-
-        </div>
-    )
-}
-
-
-export default CargarArchivos
+export default CargarArchivos;
