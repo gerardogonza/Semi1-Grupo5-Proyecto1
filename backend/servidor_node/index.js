@@ -196,7 +196,7 @@ app.post('/editfile', (req, res)=>{
     let owner = req.body.owner
     let name = req.body.name
     let new_name = req.body.new_name
-    let new_type = req.body.new_type
+    let type = req.body.type
     let respuesta = {respuesta: "true"};
 
     //console.log('owner: ',owner)
@@ -230,7 +230,7 @@ app.post('/editfile', (req, res)=>{
                 ExpressionAttributeNames: {'#name' : 'name', '#type' : 'type'},
                 ExpressionAttributeValues: {
                     ':n' : new_name,
-                    ':t' : new_type,
+                    ':t' : type,
                   }
             };
         
