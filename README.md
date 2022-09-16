@@ -10,6 +10,9 @@ Amazon Web Services (AWS) es una plataforma de servicios de nube que ofrece pote
 | 201903848| Emiliano José Alexander Velásquez Najera|
 | 201904012| Alexandro Provenzale Pérez|
 
+Link de la página:
+http://appweb-grupo5-p1.s3-website.us-east-2.amazonaws.com
+
 ---
 
 # Manual técnico :computer: 
