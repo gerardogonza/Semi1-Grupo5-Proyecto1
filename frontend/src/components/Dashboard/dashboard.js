@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { methodPOST, dashboard,eliminarArchivo,methodDELETE } from "../../services/api";
 import swal from 'sweetalert';
-import S3 from "aws-s3";
+
 const S3_BUCKET = "archivos-grupo5-p1/seminario";
 const REGION = "us-east-2";
 
@@ -47,7 +47,7 @@ function Dashboard() {
     getArchivosPublicos();
     getArchivosPrivados();
   }, [foto]);
-  const S3Client = new S3(config);
+ 
   const eliminar = async (name2) => {
     const respuesta = await methodDELETE(eliminarArchivo, {
       owner: datosDashboard[0]?.username,
