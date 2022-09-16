@@ -2,9 +2,11 @@ from flask import Flask, render_template, request
 from flask_lt import run_with_lt
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
+from flask_cors import CORS
 import encrypt
 
 app = Flask(__name__)
+CORS(app)
 run_with_lt(app)
 
 dynamodb = boto3.resource('dynamodb',
@@ -15,6 +17,45 @@ dynamodb = boto3.resource('dynamodb',
 @app.route('/')
 def hello():
     return 'Hello World'
+
+@app.post('/home')
+def home():
+    if request.method == 'POST':
+        owner = request.json['owner']
+        type = request.json['type']
+        
+        table1 =dynamodb.Table('files')
+
+        response1 = table1.query(
+            KeyConditionExpression = Key('owner').eq(owner)
+        )
+
+        items = response1['Items']
+
+        files = []
+
+        for archivo in items:
+            if archivo['type'] == type:
+                files.append(archivo)
+
+        table2 = dynamodb.Table('users')
+
+
+        response2 = table2.query(
+            KeyConditionExpression = Key('username').eq(owner)
+        )
+
+        user = response2['Items']
+
+        url = user[0]['url']
+
+        objeto = {
+                    "files" :files,
+                    "foto": url
+        }
+
+        return objeto
+       
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -39,11 +80,11 @@ def signup():
                 }
         )
         
-        return 'User Registered'
+        return {"respuesta": True}
 
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['POST'])
 def login():
-    if request.method == 'GET':   
+    if request.method == 'POST':   
         username = request.json['username']
         password = request.json['password']
 
@@ -52,15 +93,13 @@ def login():
             KeyConditionExpression = Key('username').eq(username)
         )
         items = response['Items']
-        name = items[0]['name']
-        email= items[0]['email']
         encryptedpassword = items[0]['password']
 
         decryptedpassword = encrypt.decrypt(encryptedpassword)
 
         if str(password) == str(decryptedpassword):
-            return 'Name: '+name+' Email: '+email + ' Password: '+decryptedpassword
-        return 'User Doesnt Exist'
+            return items
+        return []
 
 @app.route('/addfile', methods=['POST'])
 def addfile():
@@ -68,7 +107,7 @@ def addfile():
         owner = request.json['owner']
         name = request.json['name']
         type= request.json['type']
-        s3_path= 'ruta_prueba'
+        s3_path= request.json['s3_path']
 
         table = dynamodb.Table('files')
 
@@ -92,7 +131,7 @@ def addfile():
                 }
         )
         
-        return 'File Uploaded'
+        return {"respuesta": True}
 
 @app.route('/editfile', methods=['POST'])
 def editfile():
@@ -128,7 +167,7 @@ def editfile():
                                'Value': type
                            }})
         
-        return 'File Edited'
+        return {"respuesta": True}
 
 @app.route('/deletefile', methods=['DELETE'])
 def deletefile():
@@ -155,7 +194,7 @@ def deletefile():
                             'owner': owner,
                             'id': id})
         
-        return 'File Deleted'
+        return {"respuesta": True}
 
 @app.route('/addfriend', methods=['POST'])
 def addfriend():
@@ -172,8 +211,9 @@ def addfriend():
                 }
         )
         
-        return 'Friend Added'
+        return {"respuesta": True}
 
+    
 
 if __name__ == '__main__':
     app.run()

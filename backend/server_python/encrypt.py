@@ -2,7 +2,7 @@ import base64
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad,unpad
 
-data = '201903848'
+data = '123'
 
 key = 'AAAAAAAAAAAAAAAA'
 
@@ -19,3 +19,5 @@ def decrypt(enc):
     cipher = AES.new(key.encode('utf-8'), AES.MODE_ECB)
     result =  unpad(cipher.decrypt(enc), 16)
     return result.decode("utf-8", "ignore")
+
+print(encrypt(data))
