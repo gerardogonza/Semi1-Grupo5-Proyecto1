@@ -1,4 +1,4 @@
-const URL = "https://good-areas-talk-34-224-166-22.loca.lt";
+const URL = "http://proyecto1-553275983.us-east-1.elb.amazonaws.com";
 export const URLBUCKETAWS="https://archivos-grupo5-p1.s3.us-east-2.amazonaws.com/seminario/"
 
 export const login = "login";
