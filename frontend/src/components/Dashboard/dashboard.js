@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation,useNavigate } from "react-router-dom";
 import { methodPOST, dashboard } from "../../services/api";
 function Dashboard() {
   const location = useLocation();
+  let navigate = useNavigate();
   const [datosDashboard, setDatosDashboard] = useState(location.state);
   const [archivoPublico, setArchivoPublico] = useState([]);
   const [archivoPrivado, setArchivoPrivado] = useState([]);
-
+  const [foto, setFoto] = useState("");
   const getArchivosPublicos = async () => {
     const respuesta = await methodPOST(dashboard, {
       //   owner: "emivnajera",
       owner: datosDashboard[0]?.username,
       type: "public",
     });
-    setArchivoPublico(respuesta);
+    setArchivoPublico(respuesta.files);
+    setFoto(respuesta.foto);
     console.log(respuesta);
   };
 
@@ -24,13 +26,14 @@ function Dashboard() {
       owner: datosDashboard[0]?.username,
       type: "private",
     });
-    setArchivoPrivado(respuesta);
+    setArchivoPrivado(respuesta.files);
+    setFoto(respuesta.foto);
     console.log(respuesta);
   };
   useEffect(() => {
     getArchivosPublicos();
     getArchivosPrivados();
-  }, []);
+  }, [foto]);
   return (
     <div className="container mt-5">
       <div className="row ">
@@ -38,7 +41,7 @@ function Dashboard() {
           <div className="card" style={{ width: "18rem;" }}>
             <img
               className="card-img-top"
-              src="https://phantom-marca.unidadeditorial.es/c4774ae494d5a7076deb94e0a15add93/resize/1320/f/jpg/assets/multimedia/imagenes/2022/07/13/16577436865955.jpg"
+              src={foto}
               alt="Card image cap"
             />
             <div className="card-body">
@@ -50,18 +53,18 @@ function Dashboard() {
               <ul className="list-group list-group-flush">
                 <li className="list-group-item"></li>
                 <li className="list-group-item">
-                  <Link to={"/cargar_archivo"}>
-                    <Button variant="primary" size="sm">
+              
+                    <Button variant="primary" size="sm" onClick={()=> navigate("/cargar_archivo", { state: datosDashboard })}>
                       Subir Archivo
                     </Button>
-                  </Link>
+             
                 </li>
                 <li className="list-group-item">
-                  <Link to={"/editar_archivo"}>
-                    <Button variant="primary" size="sm">
+                    <Button variant="primary" size="sm" onClick={()=>
+                    navigate("/editar_archivo", { state: datosDashboard })}>
                       Editar Archivo
                     </Button>
-                  </Link>
+              
                 </li>
                 <li className="list-group-item">
                   <Button variant="primary" size="sm">
@@ -69,11 +72,11 @@ function Dashboard() {
                   </Button>
                 </li>
                 <li className="list-group-item">
-                <Link to={"/agregar_amigos"}>
-                  <Button variant="primary" size="sm">
-                    Agregar Amigo
-                  </Button>
-                    </Link>
+                  <Link to={"/agregar_amigos"}>
+                    <Button variant="primary" size="sm">
+                      Agregar Amigo
+                    </Button>
+                  </Link>
                 </li>
                 <li className="list-group-item">
                   <Link to={"/ver_archivo"}>
@@ -101,11 +104,15 @@ function Dashboard() {
                 <p> {archivo.name}</p>
                 <p>Propietario usuario:</p>
                 <p> {archivo.owner}</p>
-            
-                  <Button variant="primary" size="sm" target="_blank"  href={archivo.s3_path}>
-                    ver
-                  </Button>
-                
+
+                <Button
+                  variant="primary"
+                  size="sm"
+                  target="_blank"
+                  href={archivo.s3_path}
+                >
+                  ver
+                </Button>
               </div>
             ))}
           </div>
@@ -118,9 +125,14 @@ function Dashboard() {
                 <p> {archivo.name}</p>
                 <p>Propietario usuario:</p>
                 <p> {archivo.owner}</p>
-                <Button variant="primary" size="sm" target="_blank"  href={archivo.s3_path}>
-                    ver
-                  </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  target="_blank"
+                  href={archivo.s3_path}
+                >
+                  ver
+                </Button>
               </div>
             ))}
           </div>
