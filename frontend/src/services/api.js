@@ -1,6 +1,8 @@
-const URL = "http://localhost:8000";
+const URL = "https://pretty-bobcats-hug-190-104-112-253.loca.lt";
 
 export const login = "login";
+export const registrar = "signup";
+export const dashboard="home";
 
 export const methodPOST = (peticion, data) => {
   return fetch(`${URL}/${peticion}`, {

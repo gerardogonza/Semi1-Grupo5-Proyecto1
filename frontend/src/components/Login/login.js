@@ -1,20 +1,34 @@
 import "./estilo.css";
 import Barra from "../Barra";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate  } from "react-router-dom";
+import { useState } from "react";
+import swal from 'sweetalert';
 
 import { methodPOST, login } from "../../services/api";
 function Login() {
-  const log = async () => {
-  const respuesta=await methodPOST(login, {
-      username: "UsuarioPrueba",
-      password: "123",
+  let navigate = useNavigate();
+  const [logearte, setLogin] = useState({
+    username: "",
+    password: "",
   });
-    console.log(respuesta);
+  const log = async () => {
+    const respuesta = await methodPOST(login, logearte);
+    if (respuesta.length > 0) {
+      swal({
+        title:"Welcome",
+        text: "You are logged in",
+        icon: "success",
+        timer: 1000,
+      });
+      navigate("/dashboard", { state: respuesta });
+    }else{
+      swal("Credentials wrong", "wrong username or password!", "error");
+    }
   };
 
   return (
     <div className="Auth-form-container" style={{ background: "gray" }}>
-      <form className="Auth-form">
+      <div className="Auth-form">
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">Sign In</h3>
           <div className="form-group mt-3">
@@ -23,6 +37,7 @@ function Login() {
               type="email"
               className="form-control mt-1"
               placeholder="Enter email"
+              onChange={(e) => {logearte.username=e.target.value}}
             />
           </div>
           <div className="form-group mt-3">
@@ -31,21 +46,20 @@ function Login() {
               type="password"
               className="form-control mt-1"
               placeholder="Enter password"
+              onChange={(e) => {logearte.password=e.target.value}}
             />
           </div>
-          <div className="d-grid gap-2 mt-3">
-     
-          
-          </div>
+          <div className="d-grid gap-2 mt-3"></div>
+          <Link to="/registrar" >
           <p className="forgot-password text-right mt-2">
-            Forgot <a href="#">password?</a>
+           Register
           </p>
+          </Link>
         </div>
-      </form>
-      
-      <button className="btn btn-primary" onClick={()=> log()}>
-                Submit
-              </button>
+        <button className="btn btn-primary" onClick={() => log()}>
+          Submit
+        </button>
+      </div>
     </div>
   );
 }

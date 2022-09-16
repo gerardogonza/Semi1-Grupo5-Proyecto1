@@ -7,6 +7,7 @@ import AgregarAmigos from "./components/AgregarAmigos/AgregarAmigos";
 import VerArchivos from "./components/VerArchivos/VerArchivos";
 import EditarArchivo from "./components/EditarArchivo/EditarArchivo";
 import Barra from "./components/Barra";
+import Registrar from "./components/Registar/register";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/cargar_archivo" element={<div><Barra/> <CargarArchivo /></div> } exact />
           <Route path="/ver_archivo" element={<div><Barra/> <VerArchivos /></div> } exact />
           <Route path="/editar_archivo" element={<div><Barra/> <EditarArchivo/></div> } exact />
+          <Route path="/registrar" element={<div> <Registrar/></div> } exact />
         </Routes>
       </BrowserRouter>
     </div>
